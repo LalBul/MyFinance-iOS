@@ -33,32 +33,6 @@ class MainScreenViewController: UIViewController {
     
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
         
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
-        var textField = UITextField()
-        
-        alert.addTextField { alertTextField in
-            textField = alertTextField
-        }
-        
-        let action = UIAlertAction(title: "Add Category", style: .default) { alertAction in
-            let newCategory = Category()
-            if let text = textField.text {
-                newCategory.title = text
-            }
-            do {
-                try self.realm.write {
-                    self.realm.add(newCategory)
-                    self.mainTableView.reloadData()
-                }
-            } catch {
-                print("Error adding realm data Category")
-            }
-            
-        }
-        
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-        
     }
     
     private func loadCategory() {
