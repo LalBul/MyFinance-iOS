@@ -43,7 +43,7 @@ class ItemsViewController: UITableViewController {
                         let newItem = Items()
                         newItem.title = textField1.text!
                         if let text2 = textField2.text {
-                            guard let amountDouble = Double(text2) else {fatalError("Error converting in Double")}
+                            let amountDouble = Double(text2) ?? 0
                             newItem.amount = amountDouble
                         }
                         newItem.date = Date()
@@ -94,9 +94,6 @@ class ItemsViewController: UITableViewController {
     }
     
    
-    
-    
-    
     
     
 }
