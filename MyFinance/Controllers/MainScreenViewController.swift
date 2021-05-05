@@ -45,12 +45,19 @@ class MainScreenViewController: UIViewController {
         
         downloadDataEnty = []
         categoryArray = realm.objects(Category.self)
+        
+        var colors: [UIColor] = []
 
         if let array = categoryArray {
             for i in array {
                 let newPieChartData = PieChartDataEntry()
-                newPieChartData.value = i.items.sum(ofProperty: "amount")
-                newPieChartData.label = i.title
+                if i.items.sum(ofProperty: "amount") > 0 {
+                    newPieChartData.value = i.items.sum(ofProperty: "amount")
+                } else {continue}
+                
+                if let color = HexColor(i.color) {
+                    colors.append(color)
+                }
                 downloadDataEnty.append(newPieChartData)
             }
         }
@@ -59,13 +66,14 @@ class MainScreenViewController: UIViewController {
         chartView.centerText = String(allAmount)
         
         let dataSet = PieChartDataSet(entries: downloadDataEnty, label: nil)
-        let colors = [UIColor(.black), UIColor(.gray)]
+        
         dataSet.colors = colors
         
         let data = PieChartData(dataSet: dataSet)
         chartView.data = data
 
         chartView.entryLabelColor = .white
+      
         
         mainTableView.reloadData()
         
@@ -77,16 +85,20 @@ class MainScreenViewController: UIViewController {
     @IBOutlet weak var addCategoryUIView: UIView!
     
     @IBOutlet weak var colorView: UIView!
+    @IBOutlet weak var colorViewText: UILabel!
     @IBOutlet weak var categoryText: UITextField!
     
     private var blurEffectView = UIVisualEffectView()
     
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
         
+        navigationController?.navigationBar.isHidden = true
+        
         colorView.layer.cornerRadius = 10
         colorView.backgroundColor = HexColor("#132743")
-       
         
+        colorViewText.font = UIFont.boldSystemFont(ofSize: 20)
+       
         addCategoryUIView.layer.cornerRadius = 20
         addCategoryUIView.center = view.center
         addCategoryUIView.transform = CGAffineTransform(scaleX: 0.05, y: 0.1)
@@ -110,11 +122,11 @@ class MainScreenViewController: UIViewController {
     
     @IBAction func addCategoryCancel(_ sender: UIButton) {
         backAnimate()
-        self.blurEffectView.removeFromSuperview()
+        blurEffectView.removeFromSuperview()
+        
     }
     
     @IBAction func addCategoryButton(_ sender: UIButton) {
-        
         if let category = categoryText.text {
             var colorHex: String = "132743"
             if let color = colorView.backgroundColor {
@@ -123,6 +135,7 @@ class MainScreenViewController: UIViewController {
             
             let newCategory = Category()
             newCategory.title = category
+            newCategory.color = colorHex
             do {
                 try realm.write {
                     realm.add(newCategory)
@@ -133,6 +146,8 @@ class MainScreenViewController: UIViewController {
                 print("Error added new Category")
             }
         }
+        navigationController?.navigationBar.isHidden = false
+        blurEffectView.removeFromSuperview()
     }
     
     func backAnimate() {
@@ -142,6 +157,7 @@ class MainScreenViewController: UIViewController {
         } completion: { _ in
             self.addCategoryUIView.removeFromSuperview()
         }
+        navigationController?.navigationBar.isHidden = false
     }
     
 //MARK: - Color Settings
@@ -150,42 +166,63 @@ class MainScreenViewController: UIViewController {
     
     @IBOutlet weak var colorSlider: UIView!
     @IBOutlet weak var demonstrationView: UIView!
+    @IBOutlet weak var demonstrationViewText: UILabel!
     
-    @objc func changedColor(_ slider: ColorSlider) {
-        let color = slider.color
-        demonstrationView.backgroundColor = color
-    }
+    var newColorSlider = ColorSlider()
     
     @IBAction func toColourSettings(_ sender: UIButton) {
+        
+        demonstrationView.layer.cornerRadius = 10
+        demonstrationViewText.font = UIFont.boldSystemFont(ofSize: 20)
         
         let previewColorSlider = DefaultPreviewView()
         previewColorSlider.side = .right
         previewColorSlider.animationDuration = 0
         previewColorSlider.offsetAmount = 10
 
-        let newColorSlider = ColorSlider(orientation: .horizontal, previewView: previewColorSlider)
+        newColorSlider = ColorSlider(orientation: .horizontal, previewView: previewColorSlider)
         newColorSlider.frame = CGRect(x: 0, y: 0, width: 300, height: 40)
         newColorSlider.center.x = colorSlider.center.x
         newColorSlider.center.y = newColorSlider.center.y + 25
         newColorSlider.addTarget(nil, action: #selector(changedColor(_:)), for: .valueChanged)
         
+        colorSettingsUIView.layer.cornerRadius = 20
         colorSettingsUIView.center = view.center
         view.addSubview(colorSettingsUIView)
+        
         colorSlider.addSubview(newColorSlider)
         
+    }
+    
+    @IBAction func plusAndMinusDark(_ sender: UIButton) {
+        var darkRate: Float = 0
+        var lightRate: Float = 0
+        if sender.currentTitle == "+" {
+            darkRate+=0.1
+            demonstrationView.backgroundColor = demonstrationView.backgroundColor?.darken(byPercentage: CGFloat(darkRate))
+        } else if sender.currentTitle == "-" {
+            lightRate+=0.1
+            demonstrationView.backgroundColor = demonstrationView.backgroundColor?.lighten(byPercentage: CGFloat(lightRate))
+        }
     }
     
     
     @IBAction func addColor(_ sender: UIButton) {
         colorView.backgroundColor = demonstrationView.backgroundColor
         colorSettingsUIView.removeFromSuperview()
-        
+        newColorSlider.removeFromSuperview()
     }
-    
     
     @IBAction func toBackFromColourSettings(_ sender: UIButton) {
         colorSettingsUIView.removeFromSuperview()
+        newColorSlider.removeFromSuperview()
     }
+    
+    @objc func changedColor(_ slider: ColorSlider) {
+        let color = slider.color
+        demonstrationView.backgroundColor = color
+    }
+    
     
 }
 
@@ -202,9 +239,11 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
         cell.delegate = self
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        
 
         if let category = categoryArray?[indexPath.row] {
             cell.textLabel?.text = category.title
+            cell.contentView.backgroundColor = HexColor(category.color)
         }
         
         return cell
