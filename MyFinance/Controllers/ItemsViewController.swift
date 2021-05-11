@@ -7,64 +7,126 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
+import SwipeCellKit
 
-class ItemsViewController: UITableViewController {
+class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
+    
+    @IBOutlet weak var addItemOutlet: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadItems()
+        
+        tableView.rowHeight = 80
+        self.navigationItem.backBarButtonItem?.tintColor = UIColor.white
+        addItemOutlet.image = UIImage(named: "add")
+        defaultValue = defaults.double(forKey: "Limit")
+        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        loadItems()
+    }
+
     let realm = try! Realm()
     var items: Results<Items>?
-    
     var selectedCategory: Category?
-    
-    
-    @IBAction func addItem(_ sender: UIBarButtonItem) {
-        
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
-        var textField1 = UITextField()
-        var textField2 = UITextField()
-        
-        alert.addTextField { alertTextField in
-            alertTextField.placeholder = "Title"
-            textField1 = alertTextField
-        }
-        alert.addTextField { alertTextField in
-            alertTextField.placeholder = "Amount"
-            textField2 = alertTextField
-        }
-        
-        let action = UIAlertAction(title: "Add Item", style: .default) { alertAction in
-            if let category = self.selectedCategory {
-                do {
-                    try self.realm.write {
-                        let newItem = Items()
-                        newItem.title = textField1.text!
-                        if let text2 = textField2.text {
-                            let amountDouble = Double(text2) ?? 0
-                            newItem.amount = amountDouble
-                        }
-                        newItem.date = Date()
-                        category.items.append(newItem)
-                        self.realm.add(newItem)
-                        self.tableView.reloadData()
-                    }
-                } catch {
-                    print("Error adding Item")
-                }
-            }
-            
-        }
-        
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+    let defaults = UserDefaults.standard
+    var defaultValue: Double = 0
+ 
+    func loadItems() {
+        items = selectedCategory?.items.sorted(byKeyPath: "date")
+        tableView.reloadData()
     }
     
-    func loadItems() {
-        items = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
-        tableView.reloadData()
+   
+    
+    //MARK: - Add Item
+    
+    @IBOutlet var addItemView: UIView!
+    
+    @IBOutlet weak var wasteTextField: UITextField!
+    @IBOutlet weak var amountTextField: UITextField!
+    @IBOutlet weak var cancelOutlet: UIButton!
+    
+    private var blurEffectView = UIVisualEffectView()
+    
+    @IBAction func addItemButton(_ sender: UIBarButtonItem) {
+        
+        tableView.isScrollEnabled = false
+
+        addItemView.layer.cornerRadius = 15
+        addItemView.center = view.center
+        addItemView.center.y += 50
+        addItemView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        
+        wasteTextField.attributedPlaceholder = NSAttributedString(string: "What did you spend it on?", attributes: [NSAttributedString.Key.foregroundColor : UIColor.darkGray, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)])
+        wasteTextField.layer.cornerRadius = 15
+        
+        amountTextField.attributedPlaceholder = NSAttributedString(string: "0", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
+        amountTextField.layer.cornerRadius = 20
+        
+        cancelOutlet.setImage(UIImage(named:"cancel"), for: .normal)
+        
+        let blurEffect = UIBlurEffect(style: .dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    
+        view.addSubview(blurEffectView)
+        view.addSubview(addItemView)
+        
+        UIView.animate(withDuration: 0.25) {
+            
+            self.addItemView.center.y -= 200
+            self.addItemView.transform = CGAffineTransform.identity
+        } completion: { _ in
+            self.navigationController?.navigationBar.isHidden = true
+        }
+        
+    
+    }
+    
+    
+    @IBAction func addItem(_ sender: UIButton) {
+        if let waste = wasteTextField.text, let amount = amountTextField.text {
+            guard let amountDouble = Double(amount) else {fatalError("Error converting in double amount")}
+            do {
+                try realm.write {
+                    let newItem = Items()
+                    newItem.date = Date()
+                    newItem.title = waste
+                    newItem.amount = amountDouble
+                    selectedCategory?.items.append(newItem)
+                    backAnimate()
+                    tableView.reloadData()
+                }
+            } catch {
+                print("Error save item")
+            }
+        }
+    }
+    
+    
+    @IBAction func cancelAddItem(_ sender: UIButton) {
+        backAnimate()
+    }
+    
+    func backAnimate() {
+        blurEffectView.removeFromSuperview()
+        self.navigationController?.navigationBar.isHidden = false
+        tableView.isScrollEnabled = true
+        wasteTextField.text = ""
+        amountTextField.text = ""
+        UIView.animate(withDuration: 0.25) {
+            self.view.alpha = 1
+            self.addItemView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            self.addItemView.center.y += 500
+        } completion: { _ in
+            self.addItemView.removeFromSuperview()
+        }
+        
     }
     
     //MARK: - Table View
@@ -74,25 +136,31 @@ class ItemsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemsCell", for: indexPath)
-        if let item = items?[indexPath.row] {
-            cell.textLabel?.text = item.title
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ItemsCell", for: indexPath) as! BuyCell
+        cell.delegate = self
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        if let item = items?[indexPath.row], let itemDate = items?[indexPath.row].date {
+            cell.buyName.text = item.title
+            cell.buyPrice.text = String(item.amount)
+            cell.buyDate.text = formatter.string(from: itemDate)
         }
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goToInformation", sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! InformationViewController
-        if let indexPath = tableView.indexPathForSelectedRow {
-            if let item = items?[indexPath.row] {
-                destinationVC.amount = item.amount
-                destinationVC.date = item.date
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { swipeAction, indexPath in
+            do {
+                try self.realm.write {
+                    self.realm.delete((self.selectedCategory?.items[indexPath.row])!)
+                    tableView.reloadData()
+                }
+            } catch {
+                print("Fail delete cell")
             }
         }
+        return [deleteAction]
     }
     
 }

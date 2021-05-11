@@ -13,80 +13,102 @@ import ColorSlider
 import ChameleonFramework
 
 class MainScreenViewController: UIViewController {
-
-
+    
     @IBOutlet weak var mainTableView: UITableView!
     @IBOutlet weak var viewCategory: UIView!
     @IBOutlet weak var chartView: PieChartView!
+    @IBOutlet weak var limitTodayLabel: UILabel!
+    @IBOutlet weak var addLimitButton: UIBarButtonItem!
     
     var downloadDataEnty: [PieChartDataEntry] = []
     var realm = try! Realm()
     var categoryArray: Results<Category>?
     var items: Results<Items>?
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-    
-        updateChartData()
-        mainTableView.backgroundColor = UIColor(red: 0.07, green: 0.15, blue: 0.26, alpha: 1.00)
         
+        super.viewDidLoad()
+        updateChartData()
+        
+        mainTableView.backgroundColor = UIColor(red: 0.07, green: 0.15, blue: 0.26, alpha: 1.00)
         mainTableView.delegate = self
         mainTableView.dataSource = self
+        mainTableView.layer.cornerRadius = 20
+        mainTableView.rowHeight = 60
+        
+        navigationController?.navigationBar.barTintColor = HexColor("1D2D50")
         
         viewCategory.layer.cornerRadius = 30
-        mainTableView.layer.cornerRadius = 20
     }
     
+    
     override func viewWillAppear (_ animated: Bool) {
+        setGradientBackground()
+        let limit = defaults.double(forKey: "Limit")
+        if limit > 0 {
+            addLimitButton.isEnabled = false
+        }
+        limitTodayLabel.text = "Left: " + String(limit)
         updateChartData()
     }
     
     private func updateChartData() {
         
         downloadDataEnty = []
-        categoryArray = realm.objects(Category.self)
-        
         var colors: [UIColor] = []
-
+        categoryArray = realm.objects(Category.self)
+  
         if let array = categoryArray {
             for i in array {
                 let newPieChartData = PieChartDataEntry()
-                if i.items.sum(ofProperty: "amount") > 0 {
+                if i.items.sum(ofProperty: "amount") > 0.0 {
                     newPieChartData.value = i.items.sum(ofProperty: "amount")
                 } else {continue}
-                
                 if let color = HexColor(i.color) {
                     colors.append(color)
                 }
                 downloadDataEnty.append(newPieChartData)
             }
         }
-
+        
         let allAmount: Double = realm.objects(Items.self).sum(ofProperty: "amount")  // Сумма покупок за всё время
         chartView.centerText = String(allAmount)
-        
+
         let dataSet = PieChartDataSet(entries: downloadDataEnty, label: nil)
-        
         dataSet.colors = colors
+        dataSet.valueFont = .boldSystemFont(ofSize: 0)
         
         let data = PieChartData(dataSet: dataSet)
         chartView.data = data
-
-        chartView.entryLabelColor = .white
-      
         
         mainTableView.reloadData()
         
     }
     
+    func setGradientBackground() { // Градиент
+        let colorTop = UIColor(hexString: "213C66")!.darken(byPercentage: 0.15)!.cgColor
+        let colorBottom = UIColor(.black).cgColor
+                    
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [colorTop, colorBottom]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.frame = self.view.bounds
+                
+        self.view.layer.insertSublayer(gradientLayer, at:0)
+    }
     
-//MARK: - Add Category
+    
+    //MARK: - Add Category
     
     @IBOutlet weak var addCategoryUIView: UIView!
     
     @IBOutlet weak var colorView: UIView!
     @IBOutlet weak var colorViewText: UILabel!
     @IBOutlet weak var categoryText: UITextField!
+    
+    @IBOutlet weak var colorButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
     
     private var blurEffectView = UIVisualEffectView()
     
@@ -95,10 +117,12 @@ class MainScreenViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         colorView.layer.cornerRadius = 10
+        colorButton.setImage(UIImage(named:"palette"), for: .normal)
+        backButton.setImage(UIImage(named:"back"), for: .normal)
         colorView.backgroundColor = HexColor("#132743")
         
         colorViewText.font = UIFont.boldSystemFont(ofSize: 20)
-       
+        
         addCategoryUIView.layer.cornerRadius = 20
         addCategoryUIView.center = view.center
         addCategoryUIView.transform = CGAffineTransform(scaleX: 0.05, y: 0.1)
@@ -107,23 +131,20 @@ class MainScreenViewController: UIViewController {
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         
         categoryText.layer.cornerRadius = 10
-        categoryText.attributedPlaceholder = NSAttributedString(string: "Add new category", attributes: [NSAttributedString.Key.foregroundColor : UIColor(red: 0.08, green: 0.13, blue: 0.22, alpha: 1.00)])
-       
+        categoryText.attributedPlaceholder = NSAttributedString(string: "Waste", attributes: [NSAttributedString.Key.foregroundColor : UIColor.systemBlue])
+        
         blurEffectView.frame = view.bounds
         view.addSubview(blurEffectView)
         view.addSubview(addCategoryUIView)
         
-        UIView.animate(withDuration: 0.3) {
-            
+        UIView.animate(withDuration: 0.2) {
             self.addCategoryUIView.transform = CGAffineTransform.identity
         }
     }
     
-    
     @IBAction func addCategoryCancel(_ sender: UIButton) {
         backAnimate()
         blurEffectView.removeFromSuperview()
-        
     }
     
     @IBAction func addCategoryButton(_ sender: UIButton) {
@@ -152,7 +173,7 @@ class MainScreenViewController: UIViewController {
     
     func backAnimate() {
         categoryText.text = ""
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.2) {
             self.addCategoryUIView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         } completion: { _ in
             self.addCategoryUIView.removeFromSuperview()
@@ -160,7 +181,7 @@ class MainScreenViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
     }
     
-//MARK: - Color Settings
+    //MARK: - Color Settings
     
     @IBOutlet weak var colorSettingsUIView: UIView!
     
@@ -179,7 +200,7 @@ class MainScreenViewController: UIViewController {
         previewColorSlider.side = .right
         previewColorSlider.animationDuration = 0
         previewColorSlider.offsetAmount = 10
-
+        
         newColorSlider = ColorSlider(orientation: .horizontal, previewView: previewColorSlider)
         newColorSlider.frame = CGRect(x: 0, y: 0, width: 300, height: 40)
         newColorSlider.center.x = colorSlider.center.x
@@ -230,17 +251,16 @@ class MainScreenViewController: UIViewController {
 
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
     
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categoryArray?.count ?? 0
     }
     
-     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
         cell.delegate = self
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         
-
         if let category = categoryArray?[indexPath.row] {
             cell.textLabel?.text = category.title
             cell.contentView.backgroundColor = HexColor(category.color)
@@ -251,9 +271,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
-
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { swipeAction, indexPath in
-            
             if let array = self.categoryArray {
                 do {
                     try self.realm.write {
@@ -264,14 +282,10 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
                 } catch {
                     print("Delete error")
                 }
-                
             }
-            
         }
         return [deleteAction]
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
@@ -283,14 +297,11 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
             if let indexPath = mainTableView.indexPathForSelectedRow {
                 if let category = categoryArray?[indexPath.row] {
                     destinationVC.selectedCategory = category
-                    destinationVC.title = category.title
                 }
             }
         }
-        
     }
     
     
-
 }
 
