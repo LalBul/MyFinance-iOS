@@ -28,19 +28,19 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
     override func viewWillAppear(_ animated: Bool) {
         loadItems()
     }
-
+    
     let realm = try! Realm()
     var items: Results<Items>?
     var selectedCategory: Category?
     let defaults = UserDefaults.standard
     var defaultValue: Double = 0
- 
+    
     func loadItems() {
         items = selectedCategory?.items.sorted(byKeyPath: "date")
         tableView.reloadData()
     }
     
-   
+    
     
     //MARK: - Add Item
     
@@ -55,7 +55,7 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
     @IBAction func addItemButton(_ sender: UIBarButtonItem) {
         
         tableView.isScrollEnabled = false
-
+        
         addItemView.layer.cornerRadius = 15
         addItemView.center = view.center
         addItemView.center.y += 50
@@ -66,6 +66,7 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         
         amountTextField.attributedPlaceholder = NSAttributedString(string: "0", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
         amountTextField.layer.cornerRadius = 20
+        amountTextField.keyboardType = .decimalPad
         
         cancelOutlet.setImage(UIImage(named:"cancel"), for: .normal)
         
@@ -73,32 +74,37 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = self.view.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    
+        
         view.addSubview(blurEffectView)
         view.addSubview(addItemView)
         
         UIView.animate(withDuration: 0.25) {
-            
             self.addItemView.center.y -= 200
             self.addItemView.transform = CGAffineTransform.identity
         } completion: { _ in
             self.navigationController?.navigationBar.isHidden = true
         }
         
-    
     }
     
-    
     @IBAction func addItem(_ sender: UIButton) {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.decimalSeparator = ","
         if let waste = wasteTextField.text, let amount = amountTextField.text {
-            guard let amountDouble = Double(amount) else {fatalError("Error converting in double amount")}
+            var format = numberFormatter.number(from: amount)
+            if format == nil {
+                numberFormatter.decimalSeparator = "."
+                format = numberFormatter.number(from: amount)
+            }
+            guard let amountInDouble = format as? Double else {fatalError("Error converting in Double")}
+            let newItem = Items()
+            newItem.date = Date()
+            newItem.title = waste
+            newItem.amount = amountInDouble
             do {
                 try realm.write {
-                    let newItem = Items()
-                    newItem.date = Date()
-                    newItem.title = waste
-                    newItem.amount = amountDouble
                     selectedCategory?.items.append(newItem)
+                    defaults.setValue(defaultValue-amountInDouble, forKey: "Limit")
                     backAnimate()
                     tableView.reloadData()
                 }
@@ -120,13 +126,11 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         wasteTextField.text = ""
         amountTextField.text = ""
         UIView.animate(withDuration: 0.25) {
-            self.view.alpha = 1
             self.addItemView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             self.addItemView.center.y += 500
         } completion: { _ in
             self.addItemView.removeFromSuperview()
         }
-        
     }
     
     //MARK: - Table View

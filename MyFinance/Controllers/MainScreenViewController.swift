@@ -11,46 +11,117 @@ import Charts
 import SwipeCellKit
 import ColorSlider
 import ChameleonFramework
+import WatchConnectivity
 
 class MainScreenViewController: UIViewController {
-    
+
     @IBOutlet weak var mainTableView: UITableView!
-    @IBOutlet weak var viewCategory: UIView!
-    @IBOutlet weak var chartView: PieChartView!
     @IBOutlet weak var limitTodayLabel: UILabel!
     @IBOutlet weak var addLimitButton: UIBarButtonItem!
     
-    var downloadDataEnty: [PieChartDataEntry] = []
     var realm = try! Realm()
     var categoryArray: Results<Category>?
     var items: Results<Items>?
     let defaults = UserDefaults.standard
     
+    var session: WCSession?
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        limitViewPresent()
         updateChartData()
         
-        mainTableView.backgroundColor = UIColor(red: 0.07, green: 0.15, blue: 0.26, alpha: 1.00)
+        configureWatchKitSesstion()
+    
+        mainTableView.backgroundColor = UIColor.clear
         mainTableView.delegate = self
         mainTableView.dataSource = self
         mainTableView.layer.cornerRadius = 20
         mainTableView.rowHeight = 60
         
         navigationController?.navigationBar.barTintColor = HexColor("1D2D50")
-        
-        viewCategory.layer.cornerRadius = 30
     }
-    
     
     override func viewWillAppear (_ animated: Bool) {
         setGradientBackground()
         let limit = defaults.double(forKey: "Limit")
         if limit > 0 {
             addLimitButton.isEnabled = false
+            limitTodayLabel.text = "Left: " + String(limit)
+        } else if limit < 0 {
+            addLimitButton.isEnabled = false
+            limitTodayLabel.text = String(limit)
+        } else {
+            limitTodayLabel.text = "There is no limit"
         }
-        limitTodayLabel.text = "Left: " + String(limit)
         updateChartData()
+    }
+    
+    func configureWatchKitSesstion() {
+        
+        if WCSession.isSupported() {
+            session = WCSession.default
+            session?.delegate = self
+            session?.activate()
+        }
+    }
+    
+    //MARK: - Present Limit View
+    
+    @IBOutlet var startLimitView: UIView!
+    @IBOutlet weak var limitLabel: UILabel!
+    
+    @IBAction func okLimit(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.25) {
+            self.startLimitView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            self.startLimitView.center.y += 500
+        } completion: { _ in
+            self.startLimitView.removeFromSuperview()
+        }
+    }
+    
+    func limitViewPresent() {
+        
+        if let limitDate = defaults.object(forKey: "Date") as? Date {
+            let limitValue = defaults.double(forKey: "Limit")
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            if formatter.string(from: Date()) != formatter.string(from: limitDate) { // Следующий день лимита
+                if limitValue > 0 {
+                    limitLabel.text = "You saved \(limitValue)"
+                } else if limitValue < 0 {
+                    limitLabel.text = "You are in the red by \(limitValue)"
+                } else {
+                    limitLabel.text = "There was no limit"
+                }
+                defaults.setValue(nil, forKey: "Limit")
+                defaults.setValue(nil, forKey: "Date")
+                limitLabel.layer.cornerRadius = 10
+                startLimitView.center = view.center
+                startLimitView.layer.cornerRadius = 15
+                view.addSubview(startLimitView)
+            } else {
+                // Тот-же день лимита
+            }
+        }
+    }
+    
+   
+    //MARK: - Chart
+    
+    @IBOutlet weak var chartView: PieChartView!
+    var downloadDataEnty: [PieChartDataEntry] = []
+    
+    func getCategoryNames() -> [String] {
+        var arrayNames:[String] = []
+        if let category = categoryArray {
+            for i in 0...category.count {
+                arrayNames.append(category[i].title)
+            }
+        }
+        return arrayNames
     }
     
     private func updateChartData() {
@@ -58,7 +129,18 @@ class MainScreenViewController: UIViewController {
         downloadDataEnty = []
         var colors: [UIColor] = []
         categoryArray = realm.objects(Category.self)
-  
+        
+        // Передача Apple Watch
+        if session?.activationState == .activated {
+            if let validSession = self.session, validSession.isReachable {
+                let data: [String: Any] = ["categoryCount": categoryArray?.count as Any]
+                let categoryNames: [String: Any] = ["categoryNames": getCategoryNames() as Any]
+                validSession.sendMessage(data, replyHandler: nil, errorHandler: nil)
+                validSession.sendMessage(categoryNames, replyHandler: nil, errorHandler: nil)
+            }
+        }
+        //
+        
         if let array = categoryArray {
             for i in array {
                 let newPieChartData = PieChartDataEntry()
@@ -74,7 +156,7 @@ class MainScreenViewController: UIViewController {
         
         let allAmount: Double = realm.objects(Items.self).sum(ofProperty: "amount")  // Сумма покупок за всё время
         chartView.centerText = String(allAmount)
-
+        
         let dataSet = PieChartDataSet(entries: downloadDataEnty, label: nil)
         dataSet.colors = colors
         dataSet.valueFont = .boldSystemFont(ofSize: 0)
@@ -89,12 +171,12 @@ class MainScreenViewController: UIViewController {
     func setGradientBackground() { // Градиент
         let colorTop = UIColor(hexString: "213C66")!.darken(byPercentage: 0.15)!.cgColor
         let colorBottom = UIColor(.black).cgColor
-                    
+        
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [colorTop, colorBottom]
         gradientLayer.locations = [0.0, 1.0]
         gradientLayer.frame = self.view.bounds
-                
+        
         self.view.layer.insertSublayer(gradientLayer, at:0)
     }
     
@@ -131,7 +213,7 @@ class MainScreenViewController: UIViewController {
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         
         categoryText.layer.cornerRadius = 10
-        categoryText.attributedPlaceholder = NSAttributedString(string: "Waste", attributes: [NSAttributedString.Key.foregroundColor : UIColor.systemBlue])
+        categoryText.attributedPlaceholder = NSAttributedString(string: "Category name", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
         
         blurEffectView.frame = view.bounds
         view.addSubview(blurEffectView)
@@ -174,7 +256,7 @@ class MainScreenViewController: UIViewController {
     func backAnimate() {
         categoryText.text = ""
         UIView.animate(withDuration: 0.2) {
-            self.addCategoryUIView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            self.addCategoryUIView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         } completion: { _ in
             self.addCategoryUIView.removeFromSuperview()
         }
@@ -252,7 +334,13 @@ class MainScreenViewController: UIViewController {
 extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if categoryArray!.count <= 5 {
+            mainTableView.isScrollEnabled = false
+        } else {
+            mainTableView.isScrollEnabled = true
+        }
         return categoryArray?.count ?? 0
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -302,6 +390,26 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
         }
     }
     
+    
+}
+
+extension MainScreenViewController: WCSessionDelegate {
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        
+    }
+    
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        
+    }
     
 }
 

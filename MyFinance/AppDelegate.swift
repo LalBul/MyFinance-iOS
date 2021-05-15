@@ -7,17 +7,25 @@
 
 import UIKit
 import IQKeyboardManager
+import WatchConnectivity
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        watchConnect()
         print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true))
         IQKeyboardManager.shared().isEnabled = true
         return true
+    }
+    
+    func watchConnect() {
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+        
     }
 
     // MARK: UISceneSession Lifecycle
@@ -44,6 +52,24 @@ extension UIViewController {
     
     func showNavigationBar() {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+}
+
+extension AppDelegate: WCSessionDelegate {
+
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if let error = error {
+            print(error)
+        }
+        print("Status activate", activationState.rawValue)
+    }
+
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        
+    }
+
+    func sessionDidDeactivate(_ session: WCSession) {
+        
     }
 }
 

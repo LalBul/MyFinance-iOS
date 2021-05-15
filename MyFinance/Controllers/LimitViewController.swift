@@ -47,6 +47,7 @@ class LimitViewController: UIViewController {
         if let number = numberLabel.text {
             guard let limit = Double(number) else {fatalError("Error converting in Double")}
             defaults.setValue(limit, forKey: "Limit")
+            defaults.setValue(Date(), forKey: "Date")
             navigationController?.popToRootViewController(animated: true)
         }
     }
