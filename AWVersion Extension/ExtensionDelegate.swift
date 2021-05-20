@@ -1,8 +1,8 @@
 //
 //  ExtensionDelegate.swift
-//  AppleWatchVersion Extension
+//  AWVersion Extension
 //
-//  Created by Вова Сербин on 14.05.2021.
+//  Created by Вова Сербин on 17.05.2021.
 //
 
 import WatchKit
@@ -21,8 +21,6 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             session.activate()
         }
     }
-    
-    var row: Int = 0
 
     func applicationDidBecomeActive() {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -71,6 +69,7 @@ extension ExtensionDelegate: WCSessionDelegate {
         if let error = error {
             print("Extension Delegate", error)
         }
-    }    
+    }
     
 }
+

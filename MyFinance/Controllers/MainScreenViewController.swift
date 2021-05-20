@@ -27,14 +27,13 @@ class MainScreenViewController: UIViewController {
     var session: WCSession?
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
-        limitViewPresent()
         updateChartData()
-        
+        limitViewPresent()
         configureWatchKitSesstion()
-    
+        sendAWData()
+        
         mainTableView.backgroundColor = UIColor.clear
         mainTableView.delegate = self
         mainTableView.dataSource = self
@@ -44,7 +43,14 @@ class MainScreenViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = HexColor("1D2D50")
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        sendAWData()
+    }
+    
     override func viewWillAppear (_ animated: Bool) {
+        sendAWData()
+        super.viewWillAppear(animated)
+        
         setGradientBackground()
         let limit = defaults.double(forKey: "Limit")
         if limit > 0 {
@@ -59,14 +65,7 @@ class MainScreenViewController: UIViewController {
         updateChartData()
     }
     
-    func configureWatchKitSesstion() {
-        
-        if WCSession.isSupported() {
-            session = WCSession.default
-            session?.delegate = self
-            session?.activate()
-        }
-    }
+
     
     //MARK: - Present Limit View
     
@@ -114,32 +113,11 @@ class MainScreenViewController: UIViewController {
     @IBOutlet weak var chartView: PieChartView!
     var downloadDataEnty: [PieChartDataEntry] = []
     
-    func getCategoryNames() -> [String] {
-        var arrayNames:[String] = []
-        if let category = categoryArray {
-            for i in 0...category.count {
-                arrayNames.append(category[i].title)
-            }
-        }
-        return arrayNames
-    }
-    
     private func updateChartData() {
         
         downloadDataEnty = []
         var colors: [UIColor] = []
         categoryArray = realm.objects(Category.self)
-        
-        // Передача Apple Watch
-        if session?.activationState == .activated {
-            if let validSession = self.session, validSession.isReachable {
-                let data: [String: Any] = ["categoryCount": categoryArray?.count as Any]
-                let categoryNames: [String: Any] = ["categoryNames": getCategoryNames() as Any]
-                validSession.sendMessage(data, replyHandler: nil, errorHandler: nil)
-                validSession.sendMessage(categoryNames, replyHandler: nil, errorHandler: nil)
-            }
-        }
-        //
         
         if let array = categoryArray {
             for i in array {
@@ -244,6 +222,7 @@ class MainScreenViewController: UIViewController {
                     realm.add(newCategory)
                     updateChartData()
                     backAnimate()
+                    sendAWData()
                 }
             } catch {
                 print("Error added new Category")
@@ -366,6 +345,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
                         self.realm.delete(array[indexPath.row].items)
                         self.realm.delete(array[indexPath.row])
                         self.updateChartData()
+                        self.sendAWData()
                     }
                 } catch {
                     print("Delete error")
@@ -393,7 +373,42 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
     
 }
 
+//MARK: - WC (Apple Watch)
+
 extension MainScreenViewController: WCSessionDelegate {
+    
+    func getCategoryNames() -> [String] {
+        var arrayNames:[String] = []
+        if let category = categoryArray {
+            for i in 0..<category.count {
+                arrayNames.append(category[i].title)
+            }
+        }
+        return arrayNames
+    }
+    
+    func sendAWData() {
+        if WCSession.isSupported() {
+            if let validSession = session {
+                if let category = categoryArray {
+                    let data: [String: Any] = ["categoryCount": category.count as Int, "categoryNames": getCategoryNames() as [String]]
+                    do {
+                        try validSession.updateApplicationContext(data)
+                    } catch {
+                        print("Error updateContext")
+                    }
+                }
+            }
+        }
+    }
+    
+    func configureWatchKitSesstion() {
+        if WCSession.isSupported() {
+            session = WCSession.default
+            session?.delegate = self
+            session?.activate()
+        }
+    }
     
     func sessionDidBecomeInactive(_ session: WCSession) {
         
@@ -404,12 +419,9 @@ extension MainScreenViewController: WCSessionDelegate {
     }
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        
+        if let error = error {
+            print(error)
+        }
     }
-    
-    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
-        
-    }
-    
 }
 

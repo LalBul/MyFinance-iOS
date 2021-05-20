@@ -1,8 +1,8 @@
 //
 //  ComplicationController.swift
-//  AppleWatchVersion Extension
+//  AWVersion Extension
 //
-//  Created by Вова Сербин on 14.05.2021.
+//  Created by Вова Сербин on 17.05.2021.
 //
 
 import ClockKit
