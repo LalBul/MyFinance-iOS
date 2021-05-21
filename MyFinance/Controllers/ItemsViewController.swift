@@ -104,7 +104,9 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
             do {
                 try realm.write {
                     selectedCategory?.items.append(newItem)
-                    defaults.setValue(defaultValue-amountInDouble, forKey: "Limit")
+                    if defaults.double(forKey: "Limit") > 0  {
+                        defaults.setValue(defaultValue-amountInDouble, forKey: "Limit")
+                    }
                     backAnimate()
                     tableView.reloadData()
                 }

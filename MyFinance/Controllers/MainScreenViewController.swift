@@ -52,6 +52,11 @@ class MainScreenViewController: UIViewController {
         super.viewWillAppear(animated)
         
         setGradientBackground()
+        checkLimit()
+        updateChartData()
+    }
+    
+    func checkLimit() {
         let limit = defaults.double(forKey: "Limit")
         if limit > 0 {
             addLimitButton.isEnabled = false
@@ -62,10 +67,7 @@ class MainScreenViewController: UIViewController {
         } else {
             limitTodayLabel.text = "There is no limit"
         }
-        updateChartData()
     }
-    
-
     
     //MARK: - Present Limit View
     
@@ -93,7 +95,7 @@ class MainScreenViewController: UIViewController {
                 } else if limitValue < 0 {
                     limitLabel.text = "You are in the red by \(limitValue)"
                 } else {
-                    limitLabel.text = "There was no limit"
+                    return
                 }
                 defaults.setValue(nil, forKey: "Limit")
                 defaults.setValue(nil, forKey: "Date")
@@ -101,6 +103,7 @@ class MainScreenViewController: UIViewController {
                 startLimitView.center = view.center
                 startLimitView.layer.cornerRadius = 15
                 view.addSubview(startLimitView)
+                
             } else {
                 // Тот-же день лимита
             }
@@ -327,7 +330,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
         cell.delegate = self
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        
+
         if let category = categoryArray?[indexPath.row] {
             cell.textLabel?.text = category.title
             cell.contentView.backgroundColor = HexColor(category.color)
