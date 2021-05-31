@@ -14,7 +14,7 @@ import ChameleonFramework
 import WatchConnectivity
 
 class MainScreenViewController: UIViewController {
-
+    
     @IBOutlet weak var mainTableView: UITableView!
     @IBOutlet weak var limitTodayLabel: UILabel!
     @IBOutlet weak var addLimitButton: UIBarButtonItem!
@@ -73,8 +73,11 @@ class MainScreenViewController: UIViewController {
     
     @IBOutlet var startLimitView: UIView!
     @IBOutlet weak var limitLabel: UILabel!
+    @IBOutlet weak var limitLabelView: UIView!
     
     @IBAction func okLimit(_ sender: UIButton) {
+        blurEffectView.removeFromSuperview()
+        navigationController?.navigationBar.isHidden = false
         UIView.animate(withDuration: 0.25) {
             self.startLimitView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             self.startLimitView.center.y += 500
@@ -86,39 +89,37 @@ class MainScreenViewController: UIViewController {
     func limitViewPresent() {
         
         if let limitDate = defaults.object(forKey: "Date") as? Date {
+            
             let limitValue = defaults.double(forKey: "Limit")
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
-            if formatter.string(from: Date()) != formatter.string(from: limitDate) { // Следующий день лимита
+            if formatter.string(from: Date()) != formatter.string(from: limitDate) {
                 if limitValue > 0 {
                     limitLabel.text = "You saved \(limitValue)"
                 } else if limitValue < 0 {
                     limitLabel.text = "You are in the red by \(limitValue)"
-                } else {
-                    return
-                }
+                } else {return}
                 defaults.setValue(nil, forKey: "Limit")
                 defaults.setValue(nil, forKey: "Date")
-                limitLabel.layer.cornerRadius = 10
+                
+                limitLabelView.layer.cornerRadius = 20
                 startLimitView.center = view.center
                 startLimitView.layer.cornerRadius = 15
-                view.addSubview(startLimitView)
                 
-            } else {
-                // Тот-же день лимита
+                addBlurEffect()
+                view.addSubview(startLimitView)
+                navigationController?.navigationBar.isHidden = true
             }
         }
     }
     
-   
     //MARK: - Chart
     
     @IBOutlet weak var chartView: PieChartView!
-    var downloadDataEnty: [PieChartDataEntry] = []
     
     private func updateChartData() {
         
-        downloadDataEnty = []
+        var downloadDataEnty: [PieChartDataEntry] = []
         var colors: [UIColor] = []
         categoryArray = realm.objects(Category.self)
         
@@ -136,7 +137,7 @@ class MainScreenViewController: UIViewController {
         }
         
         let allAmount: Double = realm.objects(Items.self).sum(ofProperty: "amount")  // Сумма покупок за всё время
-        chartView.centerText = String(allAmount)
+        chartView.centerAttributedText = NSAttributedString(string: String(allAmount), attributes: [NSAttributedString.Key.foregroundColor : UIColor.black])
         
         let dataSet = PieChartDataSet(entries: downloadDataEnty, label: nil)
         dataSet.colors = colors
@@ -152,7 +153,6 @@ class MainScreenViewController: UIViewController {
     func setGradientBackground() { // Градиент
         let colorTop = UIColor(hexString: "213C66")!.darken(byPercentage: 0.15)!.cgColor
         let colorBottom = UIColor(.black).cgColor
-        
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [colorTop, colorBottom]
         gradientLayer.locations = [0.0, 1.0]
@@ -175,9 +175,8 @@ class MainScreenViewController: UIViewController {
     
     private var blurEffectView = UIVisualEffectView()
     
+    @IBOutlet weak var addCategoryOutlet: UIBarButtonItem!
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
-        
-        navigationController?.navigationBar.isHidden = true
         
         colorView.layer.cornerRadius = 10
         colorButton.setImage(UIImage(named:"palette"), for: .normal)
@@ -190,23 +189,28 @@ class MainScreenViewController: UIViewController {
         addCategoryUIView.center = view.center
         addCategoryUIView.transform = CGAffineTransform(scaleX: 0.05, y: 0.1)
         
-        let blurEffect = UIBlurEffect(style: .dark)
-        blurEffectView = UIVisualEffectView(effect: blurEffect)
-        
         categoryText.layer.cornerRadius = 10
         categoryText.attributedPlaceholder = NSAttributedString(string: "Category name", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
         
-        blurEffectView.frame = view.bounds
-        view.addSubview(blurEffectView)
+        addBlurEffect()
         view.addSubview(addCategoryUIView)
+        addCategoryOutlet.isEnabled = false
         
         UIView.animate(withDuration: 0.2) {
             self.addCategoryUIView.transform = CGAffineTransform.identity
         }
     }
     
+    func addBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        view.addSubview(blurEffectView)
+    }
+    
     @IBAction func addCategoryCancel(_ sender: UIButton) {
         backAnimate()
+        addCategoryOutlet.isEnabled = true
         blurEffectView.removeFromSuperview()
     }
     
@@ -226,6 +230,7 @@ class MainScreenViewController: UIViewController {
                     updateChartData()
                     backAnimate()
                     sendAWData()
+                    addCategoryOutlet.isEnabled = true
                 }
             } catch {
                 print("Error added new Category")
@@ -279,6 +284,11 @@ class MainScreenViewController: UIViewController {
         
     }
     
+    @objc func changedColor(_ slider: ColorSlider) {
+        let color = slider.color
+        demonstrationView.backgroundColor = color
+    }
+    
     @IBAction func plusAndMinusDark(_ sender: UIButton) {
         var darkRate: Float = 0
         var lightRate: Float = 0
@@ -303,12 +313,6 @@ class MainScreenViewController: UIViewController {
         newColorSlider.removeFromSuperview()
     }
     
-    @objc func changedColor(_ slider: ColorSlider) {
-        let color = slider.color
-        demonstrationView.backgroundColor = color
-    }
-    
-    
 }
 
 //MARK: - Table View
@@ -330,7 +334,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
         cell.delegate = self
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-
+        
         if let category = categoryArray?[indexPath.row] {
             cell.textLabel?.text = category.title
             cell.contentView.backgroundColor = HexColor(category.color)
@@ -368,6 +372,7 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
             if let indexPath = mainTableView.indexPathForSelectedRow {
                 if let category = categoryArray?[indexPath.row] {
                     destinationVC.selectedCategory = category
+                    destinationVC.title = category.title
                 }
             }
         }

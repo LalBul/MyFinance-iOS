@@ -56,6 +56,7 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         
         tableView.isScrollEnabled = false
         
+        
         addItemView.layer.cornerRadius = 15
         addItemView.center = view.center
         addItemView.center.y += 50
@@ -78,11 +79,13 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         view.addSubview(blurEffectView)
         view.addSubview(addItemView)
         
+        
         UIView.animate(withDuration: 0.25) {
             self.addItemView.center.y -= 200
             self.addItemView.transform = CGAffineTransform.identity
+            sender.isEnabled = false
         } completion: { _ in
-            self.navigationController?.navigationBar.isHidden = true
+            
         }
         
     }
@@ -133,6 +136,7 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         } completion: { _ in
             self.addItemView.removeFromSuperview()
         }
+        addItemOutlet.isEnabled = true
     }
     
     //MARK: - Table View
