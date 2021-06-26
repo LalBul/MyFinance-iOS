@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,7 +21,6 @@
 		4CB91B14263DB88700806CA8 /* ItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB91B13263DB88700806CA8 /* ItemsViewController.swift */; };
 		4CCC87822644240900069B11 /* BuyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC87812644240900069B11 /* BuyCell.swift */; };
 		4CEAAE0B264ED7C400177992 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C85A07F264D7993007F402F /* WatchConnectivity.framework */; };
-		4CEF4DD02661004900E376EC /* MainScreenFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEF4DCF2661004900E376EC /* MainScreenFunctions.swift */; };
 		4CFC7B6B2651CF7200239D5A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4CFC7B692651CF7200239D5A /* Interface.storyboard */; };
 		4CFC7B6D2651CF7300239D5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CFC7B6C2651CF7300239D5A /* Assets.xcassets */; };
 		4CFC7B742651CF7400239D5A /* AWVersion Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4CFC7B732651CF7400239D5A /* AWVersion Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -29,7 +28,7 @@
 		4CFC7B7B2651CF7400239D5A /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC7B7A2651CF7400239D5A /* ExtensionDelegate.swift */; };
 		4CFC7B7D2651CF7400239D5A /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFC7B7C2651CF7400239D5A /* ComplicationController.swift */; };
 		4CFC7B7F2651CF7400239D5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CFC7B7E2651CF7400239D5A /* Assets.xcassets */; };
-		4CFC7B832651CF7400239D5A /* AWVersion.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4CFC7B672651CF7200239D5A /* AWVersion.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4CFC7B832651CF7400239D5A /* AWVersion.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4CFC7B672651CF7200239D5A /* AWVersion.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E833223FBCFC8CAF6926050B /* Pods_MyFinance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C85A102264DB7E4007F402F /* Pods_MyFinance.framework */; };
 /* End PBXBuildFile section */
 
@@ -93,10 +92,10 @@
 		4C85A0FF264DB7B9007F402F /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C85A102264DB7E4007F402F /* Pods_MyFinance.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_MyFinance.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C8EEDB82650143B00891103 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS7.4.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
+		4CB34B6126716250005CCD0F /* MyFinance.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyFinance.entitlements; sourceTree = "<group>"; };
 		4CB3C6882645B8140083531D /* LimitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitViewController.swift; sourceTree = "<group>"; };
 		4CB91B13263DB88700806CA8 /* ItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsViewController.swift; sourceTree = "<group>"; };
 		4CCC87812644240900069B11 /* BuyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyCell.swift; sourceTree = "<group>"; };
-		4CEF4DCF2661004900E376EC /* MainScreenFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenFunctions.swift; sourceTree = "<group>"; };
 		4CFC7B672651CF7200239D5A /* AWVersion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AWVersion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CFC7B6A2651CF7200239D5A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		4CFC7B6C2651CF7300239D5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -164,6 +163,7 @@
 		4C0F9947263DA9B000AA8749 /* MyFinance */ = {
 			isa = PBXGroup;
 			children = (
+				4CB34B6126716250005CCD0F /* MyFinance.entitlements */,
 				4C0F9948263DA9B000AA8749 /* AppDelegate.swift */,
 				4C0F994A263DA9B000AA8749 /* SceneDelegate.swift */,
 				4C0F995C263DAB4C00AA8749 /* Model */,
@@ -179,7 +179,6 @@
 		4C0F995C263DAB4C00AA8749 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4CEF4DCE2661001500E376EC /* Big functions */,
 				4C0F995D263DAB5900AA8749 /* Category.swift */,
 				4C0F995F263DAC0400AA8749 /* Items.swift */,
 			);
@@ -189,9 +188,9 @@
 		4CB91B15263DB89200806CA8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4CB3C6882645B8140083531D /* LimitViewController.swift */,
 				4C0F994C263DA9B000AA8749 /* MainScreenViewController.swift */,
 				4CB91B13263DB88700806CA8 /* ItemsViewController.swift */,
-				4CB3C6882645B8140083531D /* LimitViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -203,14 +202,6 @@
 				4CCC87812644240900069B11 /* BuyCell.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		4CEF4DCE2661001500E376EC /* Big functions */ = {
-			isa = PBXGroup;
-			children = (
-				4CEF4DCF2661004900E376EC /* MainScreenFunctions.swift */,
-			);
-			path = "Big functions";
 			sourceTree = "<group>";
 		};
 		4CFC7B682651CF7200239D5A /* AWVersion */ = {
@@ -435,7 +426,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CCC87822644240900069B11 /* BuyCell.swift in Sources */,
-				4CEF4DD02661004900E376EC /* MainScreenFunctions.swift in Sources */,
 				4C0F994D263DA9B000AA8749 /* MainScreenViewController.swift in Sources */,
 				4CB3C6892645B8140083531D /* LimitViewController.swift in Sources */,
 				4CB91B14263DB88700806CA8 /* ItemsViewController.swift in Sources */,
@@ -467,6 +457,7 @@
 		};
 		4CFC7B822651CF7400239D5A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 4CFC7B662651CF7200239D5A /* AWVersion */;
 			targetProxy = 4CFC7B812651CF7400239D5A /* PBXContainerItemProxy */;
 		};
@@ -622,6 +613,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MyFinance/MyFinance.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A39ARW5Y9W;
@@ -633,6 +625,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vladimirSN.MyFinance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -644,6 +637,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MyFinance/MyFinance.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A39ARW5Y9W;
@@ -655,6 +649,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vladimirSN.MyFinance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

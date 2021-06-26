@@ -22,10 +22,10 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         self.navigationItem.backBarButtonItem?.tintColor = UIColor.white
         addItemOutlet.image = UIImage(named: "add")
         defaultValue = defaults.double(forKey: "Limit")
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         loadItems()
     }
     
@@ -36,11 +36,9 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
     var defaultValue: Double = 0
     
     func loadItems() {
-        items = selectedCategory?.items.sorted(byKeyPath: "date")
+        items = selectedCategory?.items.sorted(byKeyPath: "date", ascending: false)
         tableView.reloadData()
     }
-    
-    
     
     //MARK: - Add Item
     
@@ -52,15 +50,14 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
     
     private var blurEffectView = UIVisualEffectView()
     
-    @IBAction func addItemButton(_ sender: UIBarButtonItem) {
-        
+    fileprivate func addItemViewSettings(_ sender: UIBarButtonItem) {
         tableView.isScrollEnabled = false
-        
         
         addItemView.layer.cornerRadius = 15
         addItemView.center = view.center
-        addItemView.center.y += 50
-        addItemView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        addItemView.center.y -= 500
+        addItemView.center.x += 150
+        addItemView.transform = CGAffineTransform(scaleX: 0.05, y: 0.05)
         
         wasteTextField.attributedPlaceholder = NSAttributedString(string: "What did you spend it on?", attributes: [NSAttributedString.Key.foregroundColor : UIColor.darkGray, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)])
         wasteTextField.layer.cornerRadius = 15
@@ -79,15 +76,16 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         view.addSubview(blurEffectView)
         view.addSubview(addItemView)
         
-        
         UIView.animate(withDuration: 0.25) {
-            self.addItemView.center.y -= 200
+            self.addItemView.center.y = 250
+            self.addItemView.center.x = 187.5
             self.addItemView.transform = CGAffineTransform.identity
             sender.isEnabled = false
-        } completion: { _ in
-            
         }
-        
+    }
+    
+    @IBAction func addItemButton(_ sender: UIBarButtonItem) {
+        addItemViewSettings(sender)
     }
     
     @IBAction func addItem(_ sender: UIButton) {
@@ -118,7 +116,6 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
             }
         }
     }
-    
     
     @IBAction func cancelAddItem(_ sender: UIButton) {
         backAnimate()

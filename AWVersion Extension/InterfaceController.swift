@@ -31,7 +31,6 @@ class InterfaceController: WKInterfaceController {
         updateTable()
         print(categoryCount)
         print(categoryNames)
-   
     }
     
     override func didDeactivate() {

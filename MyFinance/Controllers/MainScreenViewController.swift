@@ -13,7 +13,7 @@ import ColorSlider
 import ChameleonFramework
 import WatchConnectivity
 
-class MainScreenViewController: UIViewController {
+class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var mainTableView: UITableView!
     @IBOutlet weak var limitTodayLabel: UILabel!
@@ -28,7 +28,6 @@ class MainScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         updateChartData()
         limitViewPresent()
         configureWatchKitSesstion()
@@ -50,10 +49,10 @@ class MainScreenViewController: UIViewController {
     override func viewWillAppear (_ animated: Bool) {
         sendAWData()
         super.viewWillAppear(animated)
-        
         setGradientBackground()
         checkLimit()
         updateChartData()
+        
     }
     
     func checkLimit() {
@@ -87,9 +86,7 @@ class MainScreenViewController: UIViewController {
     }
     
     func limitViewPresent() {
-        
         if let limitDate = defaults.object(forKey: "Date") as? Date {
-            
             let limitValue = defaults.double(forKey: "Limit")
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
@@ -99,6 +96,7 @@ class MainScreenViewController: UIViewController {
                 } else if limitValue < 0 {
                     limitLabel.text = "You are in the red by \(limitValue)"
                 } else {return}
+                
                 defaults.setValue(nil, forKey: "Limit")
                 defaults.setValue(nil, forKey: "Date")
                 
@@ -164,54 +162,48 @@ class MainScreenViewController: UIViewController {
     
     //MARK: - Add Category
     
-    @IBOutlet weak var addCategoryUIView: UIView!
-    
+    @IBOutlet weak var addCategoryView: UIView!
     @IBOutlet weak var colorView: UIView!
     @IBOutlet weak var colorViewText: UILabel!
     @IBOutlet weak var categoryText: UITextField!
-    
     @IBOutlet weak var colorButton: UIButton!
-    @IBOutlet weak var backButton: UIButton!
     
     private var blurEffectView = UIVisualEffectView()
+    private var tap = UITapGestureRecognizer()
     
     @IBOutlet weak var addCategoryOutlet: UIBarButtonItem!
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
+        addCategoryViewSettings()
+    }
+
+    fileprivate func addCategoryViewSettings() {
+        addBlurEffect()
+        
+        tap = UITapGestureRecognizer(target: self, action: #selector(tapMainView))
+        tap.isEnabled = true
+        tap.delegate = self
         
         colorView.layer.cornerRadius = 10
         colorButton.setImage(UIImage(named:"palette"), for: .normal)
-        backButton.setImage(UIImage(named:"back"), for: .normal)
         colorView.backgroundColor = HexColor("#132743")
         
         colorViewText.font = UIFont.boldSystemFont(ofSize: 20)
         
-        addCategoryUIView.layer.cornerRadius = 20
-        addCategoryUIView.center = view.center
-        addCategoryUIView.transform = CGAffineTransform(scaleX: 0.05, y: 0.1)
+        addCategoryView.layer.cornerRadius = 20
+        addCategoryView.center = view.center
+        addCategoryView.transform = CGAffineTransform(scaleX: 0.05, y: 0.1)
         
         categoryText.layer.cornerRadius = 10
         categoryText.attributedPlaceholder = NSAttributedString(string: "Category name", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
+    
+        view.addSubview(addCategoryView)
+        view.addGestureRecognizer(tap)
         
-        addBlurEffect()
-        view.addSubview(addCategoryUIView)
         addCategoryOutlet.isEnabled = false
         
         UIView.animate(withDuration: 0.2) {
-            self.addCategoryUIView.transform = CGAffineTransform.identity
+            self.addCategoryView.transform = CGAffineTransform.identity
         }
-    }
-    
-    func addBlurEffect() {
-        let blurEffect = UIBlurEffect(style: .dark)
-        blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        view.addSubview(blurEffectView)
-    }
-    
-    @IBAction func addCategoryCancel(_ sender: UIButton) {
-        backAnimate()
-        addCategoryOutlet.isEnabled = true
-        blurEffectView.removeFromSuperview()
     }
     
     @IBAction func addCategoryButton(_ sender: UIButton) {
@@ -236,24 +228,35 @@ class MainScreenViewController: UIViewController {
                 print("Error added new Category")
             }
         }
-        navigationController?.navigationBar.isHidden = false
-        blurEffectView.removeFromSuperview()
     }
     
     func backAnimate() {
+        self.blurEffectView.removeFromSuperview()
         categoryText.text = ""
         UIView.animate(withDuration: 0.2) {
-            self.addCategoryUIView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+            self.addCategoryView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         } completion: { _ in
-            self.addCategoryUIView.removeFromSuperview()
+            self.addCategoryOutlet.isEnabled = true
+            self.addCategoryView.removeFromSuperview()
         }
         navigationController?.navigationBar.isHidden = false
+    }
+    
+    func addBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        view.addSubview(blurEffectView)
+    }
+    
+    @objc func tapMainView(recognizer: UITapGestureRecognizer){
+        backAnimate()
+        tap.isEnabled = false
     }
     
     //MARK: - Color Settings
     
     @IBOutlet weak var colorSettingsUIView: UIView!
-    
     @IBOutlet weak var colorSlider: UIView!
     @IBOutlet weak var demonstrationView: UIView!
     @IBOutlet weak var demonstrationViewText: UILabel!
@@ -261,6 +264,8 @@ class MainScreenViewController: UIViewController {
     var newColorSlider = ColorSlider()
     
     @IBAction func toColourSettings(_ sender: UIButton) {
+        
+        tap.isEnabled = false
         
         demonstrationView.layer.cornerRadius = 10
         demonstrationViewText.font = UIFont.boldSystemFont(ofSize: 20)
@@ -281,7 +286,6 @@ class MainScreenViewController: UIViewController {
         view.addSubview(colorSettingsUIView)
         
         colorSlider.addSubview(newColorSlider)
-        
     }
     
     @objc func changedColor(_ slider: ColorSlider) {
@@ -303,12 +307,14 @@ class MainScreenViewController: UIViewController {
     
     
     @IBAction func addColor(_ sender: UIButton) {
+        tap.isEnabled = true
         colorView.backgroundColor = demonstrationView.backgroundColor
         colorSettingsUIView.removeFromSuperview()
         newColorSlider.removeFromSuperview()
     }
     
     @IBAction func toBackFromColourSettings(_ sender: UIButton) {
+        tap.isEnabled = true
         colorSettingsUIView.removeFromSuperview()
         newColorSlider.removeFromSuperview()
     }
@@ -326,7 +332,6 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
             mainTableView.isScrollEnabled = true
         }
         return categoryArray?.count ?? 0
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
