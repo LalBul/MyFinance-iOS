@@ -107,14 +107,22 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <view contentMode="scaleToFill" id="0wE-Pp-Gt8" userLabel="AddCategoryView">
-                    <rect key="frame" x="0.0" y="0.0" width="325" height="246"/>
+                    <rect key="frame" x="0.0" y="0.0" width="325" height="214"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gQa-Yl-rVn">
-                            <rect key="frame" x="0.5" y="0.0" width="324" height="246"/>
+                            <rect key="frame" x="0.5" y="0.0" width="324" height="214"/>
                             <subviews>
-                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sv2-Ti-mU8" userLabel="colorView">
-                                    <rect key="frame" x="2" y="119" width="320" height="51"/>
+                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add new category" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ez5-7d-zwX">
+                                    <rect key="frame" x="18" y="45" width="287" height="48"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" red="0.49803921568627452" green="0.5607843137254902" blue="0.65098039215686276" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sv2-Ti-mU8" userLabel="sampleView">
+                                    <rect key="frame" x="2" y="101" width="320" height="51"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sample" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g1V-Up-fsx">
@@ -127,16 +135,8 @@
                                     </subviews>
                                     <color key="backgroundColor" red="0.074509803921568626" green="0.15294117647058825" blue="0.2627450980392157" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </view>
-                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add new category" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ez5-7d-zwX">
-                                    <rect key="frame" x="19" y="46" width="287" height="48"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.49803921568627452" green="0.5607843137254902" blue="0.65098039215686276" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="16"/>
-                                    <textInputTraits key="textInputTraits"/>
-                                </textField>
                                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="POq-2y-U9c">
-                                    <rect key="frame" x="135" y="186" width="55" height="32"/>
+                                    <rect key="frame" x="0.0" y="154" width="324" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="22"/>
                                     <state key="normal" title="Add"/>
@@ -145,7 +145,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0sO-3p-oJZ" userLabel="Color">
-                                    <rect key="frame" x="294" y="10" width="25" height="25"/>
+                                    <rect key="frame" x="289" y="12" width="25" height="25"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="25" id="If0-Pp-2aG"/>
                                         <constraint firstAttribute="width" constant="25" id="Q2Z-2P-VDP"/>
@@ -161,10 +161,10 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="0sO-3p-oJZ" firstAttribute="top" secondItem="gQa-Yl-rVn" secondAttribute="top" constant="10" id="bNX-E4-eRn"/>
-                                <constraint firstAttribute="trailing" secondItem="0sO-3p-oJZ" secondAttribute="trailing" constant="5" id="npu-Tx-ZAy"/>
-                                <constraint firstAttribute="height" constant="246" id="sbM-tu-JYL"/>
+                                <constraint firstItem="0sO-3p-oJZ" firstAttribute="top" secondItem="gQa-Yl-rVn" secondAttribute="top" constant="12" id="Icg-0v-bd9"/>
+                                <constraint firstAttribute="height" constant="214" id="sbM-tu-JYL"/>
                                 <constraint firstAttribute="width" constant="324" id="uHz-tP-ocx"/>
+                                <constraint firstAttribute="trailing" secondItem="0sO-3p-oJZ" secondAttribute="trailing" constant="10" id="z7q-jC-nph"/>
                             </constraints>
                         </view>
                     </subviews>

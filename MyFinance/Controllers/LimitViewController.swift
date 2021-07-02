@@ -11,7 +11,7 @@ class LimitViewController: UIViewController {
     
     @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet var buttons: [UIButton]!
-    
+    private var pointBool = true
     let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
@@ -20,8 +20,6 @@ class LimitViewController: UIViewController {
             i.layer.cornerRadius = i.frame.size.height / 2
         }
     }
-    
-    private var pointBool = true
     
     @IBAction func buttons(_ sender: UIButton) {
         if let title = sender.currentTitle {

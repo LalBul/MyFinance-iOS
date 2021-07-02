@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3DB01EDA9F0032CC7589E7F9 /* Pods_MyFinance.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D3CAADE9D99C4CD9F725A5D /* Pods_MyFinance.framework */; };
+		4C01BD4F268FBCD20037BFEE /* MyFinanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5D7801268D217900218A7D /* MyFinanceWidget.swift */; };
 		4C0F9949263DA9B000AA8749 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F9948263DA9B000AA8749 /* AppDelegate.swift */; };
 		4C0F994B263DA9B000AA8749 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F994A263DA9B000AA8749 /* SceneDelegate.swift */; };
 		4C0F994D263DA9B000AA8749 /* MainScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F994C263DA9B000AA8749 /* MainScreenViewController.swift */; };
@@ -17,6 +18,13 @@
 		4C0F995E263DAB5900AA8749 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F995D263DAB5900AA8749 /* Category.swift */; };
 		4C0F9960263DAC0400AA8749 /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0F995F263DAC0400AA8749 /* Items.swift */; };
 		4C3B088A265271F200B42B82 /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C3B0889265271F200B42B82 /* Row.swift */; };
+		4C5D77FD268D217800218A7D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5D77FC268D217800218A7D /* WidgetKit.framework */; };
+		4C5D77FF268D217800218A7D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5D77FE268D217800218A7D /* SwiftUI.framework */; };
+		4C5D7802268D217900218A7D /* MyFinanceWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5D7801268D217900218A7D /* MyFinanceWidget.swift */; };
+		4C5D7805268D217900218A7D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C5D7804268D217900218A7D /* Assets.xcassets */; };
+		4C5D7807268D217900218A7D /* MyFinanceWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 4C5D7803268D217900218A7D /* MyFinanceWidget.intentdefinition */; };
+		4C5D7808268D217900218A7D /* MyFinanceWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 4C5D7803268D217900218A7D /* MyFinanceWidget.intentdefinition */; };
+		4C5D780B268D217900218A7D /* MyFinanceWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4C5D77FB268D217800218A7D /* MyFinanceWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4CB3C6892645B8140083531D /* LimitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3C6882645B8140083531D /* LimitViewController.swift */; };
 		4CB91B14263DB88700806CA8 /* ItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB91B13263DB88700806CA8 /* ItemsViewController.swift */; };
 		4CCC87822644240900069B11 /* BuyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC87812644240900069B11 /* BuyCell.swift */; };
@@ -33,6 +41,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4C5D7809268D217900218A7D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C0F993D263DA9B000AA8749 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C5D77FA268D217800218A7D;
+			remoteInfo = MyFinanceWidgetExtension;
+		};
 		4CFC7B752651CF7400239D5A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4C0F993D263DA9B000AA8749 /* Project object */;
@@ -50,6 +65,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4C5D780D268D217A00218A7D /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4C5D780B268D217900218A7D /* MyFinanceWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4C85A0F1264DA1F0007F402F /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -87,6 +113,14 @@
 		4C0F995D263DAB5900AA8749 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		4C0F995F263DAC0400AA8749 /* Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
 		4C3B0889265271F200B42B82 /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
+		4C5D77FB268D217800218A7D /* MyFinanceWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyFinanceWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C5D77FC268D217800218A7D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		4C5D77FE268D217800218A7D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		4C5D7801268D217900218A7D /* MyFinanceWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFinanceWidget.swift; sourceTree = "<group>"; };
+		4C5D7803268D217900218A7D /* MyFinanceWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = MyFinanceWidget.intentdefinition; sourceTree = "<group>"; };
+		4C5D7804268D217900218A7D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4C5D7806268D217900218A7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4C5D780C268D217A00218A7D /* MyFinanceWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyFinanceWidgetExtension.entitlements; sourceTree = "<group>"; };
 		4C85A07F264D7993007F402F /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
 		4C85A0FB264DB7B4007F402F /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C85A0FF264DB7B9007F402F /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +162,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4C5D77F8268D217800218A7D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5D77FF268D217800218A7D /* SwiftUI.framework in Frameworks */,
+				4C5D77FD268D217800218A7D /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4CFC7B702651CF7400239D5A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,9 +184,11 @@
 		4C0F993C263DA9B000AA8749 = {
 			isa = PBXGroup;
 			children = (
+				4C5D780C268D217A00218A7D /* MyFinanceWidgetExtension.entitlements */,
 				4C0F9947263DA9B000AA8749 /* MyFinance */,
 				4CFC7B682651CF7200239D5A /* AWVersion */,
 				4CFC7B772651CF7400239D5A /* AWVersion Extension */,
+				4C5D7800268D217800218A7D /* MyFinanceWidget */,
 				4C0F9946263DA9B000AA8749 /* Products */,
 				7A1D7FB75F58D4D35199DA5F /* Pods */,
 				C3011DDD403141202CD51662 /* Frameworks */,
@@ -156,6 +201,7 @@
 				4C0F9945263DA9B000AA8749 /* MyFinance.app */,
 				4CFC7B672651CF7200239D5A /* AWVersion.app */,
 				4CFC7B732651CF7400239D5A /* AWVersion Extension.appex */,
+				4C5D77FB268D217800218A7D /* MyFinanceWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -183,6 +229,17 @@
 				4C0F995F263DAC0400AA8749 /* Items.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		4C5D7800268D217800218A7D /* MyFinanceWidget */ = {
+			isa = PBXGroup;
+			children = (
+				4C5D7801268D217900218A7D /* MyFinanceWidget.swift */,
+				4C5D7803268D217900218A7D /* MyFinanceWidget.intentdefinition */,
+				4C5D7804268D217900218A7D /* Assets.xcassets */,
+				4C5D7806268D217900218A7D /* Info.plist */,
+			);
+			path = MyFinanceWidget;
 			sourceTree = "<group>";
 		};
 		4CB91B15263DB89200806CA8 /* Controllers */ = {
@@ -245,6 +302,8 @@
 				4C85A0FB264DB7B4007F402F /* Realm.framework */,
 				4C85A07F264D7993007F402F /* WatchConnectivity.framework */,
 				6D3CAADE9D99C4CD9F725A5D /* Pods_MyFinance.framework */,
+				4C5D77FC268D217800218A7D /* WidgetKit.framework */,
+				4C5D77FE268D217800218A7D /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -262,16 +321,35 @@
 				4C0F9943263DA9B000AA8749 /* Resources */,
 				B96585177DAB630BE3517183 /* [CP] Embed Pods Frameworks */,
 				4C85A0F1264DA1F0007F402F /* Embed Watch Content */,
+				4C5D780D268D217A00218A7D /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				4CFC7B822651CF7400239D5A /* PBXTargetDependency */,
+				4C5D780A268D217900218A7D /* PBXTargetDependency */,
 			);
 			name = MyFinance;
 			productName = MyFinance;
 			productReference = 4C0F9945263DA9B000AA8749 /* MyFinance.app */;
 			productType = "com.apple.product-type.application";
+		};
+		4C5D77FA268D217800218A7D /* MyFinanceWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C5D7810268D217A00218A7D /* Build configuration list for PBXNativeTarget "MyFinanceWidgetExtension" */;
+			buildPhases = (
+				4C5D77F7268D217800218A7D /* Sources */,
+				4C5D77F8268D217800218A7D /* Frameworks */,
+				4C5D77F9268D217800218A7D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyFinanceWidgetExtension;
+			productName = MyFinanceWidgetExtension;
+			productReference = 4C5D77FB268D217800218A7D /* MyFinanceWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		4CFC7B662651CF7200239D5A /* AWVersion */ = {
 			isa = PBXNativeTarget;
@@ -320,6 +398,9 @@
 					4C0F9944263DA9B000AA8749 = {
 						CreatedOnToolsVersion = 12.5;
 					};
+					4C5D77FA268D217800218A7D = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
 					4CFC7B662651CF7200239D5A = {
 						CreatedOnToolsVersion = 12.5;
 					};
@@ -344,6 +425,7 @@
 				4C0F9944263DA9B000AA8749 /* MyFinance */,
 				4CFC7B662651CF7200239D5A /* AWVersion */,
 				4CFC7B722651CF7400239D5A /* AWVersion Extension */,
+				4C5D77FA268D217800218A7D /* MyFinanceWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -356,6 +438,14 @@
 				4C0F9955263DA9B100AA8749 /* LaunchScreen.storyboard in Resources */,
 				4C0F9952263DA9B100AA8749 /* Assets.xcassets in Resources */,
 				4C0F9950263DA9B000AA8749 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C5D77F9268D217800218A7D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5D7805268D217900218A7D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,12 +517,23 @@
 			files = (
 				4CCC87822644240900069B11 /* BuyCell.swift in Sources */,
 				4C0F994D263DA9B000AA8749 /* MainScreenViewController.swift in Sources */,
+				4C5D7808268D217900218A7D /* MyFinanceWidget.intentdefinition in Sources */,
 				4CB3C6892645B8140083531D /* LimitViewController.swift in Sources */,
+				4C01BD4F268FBCD20037BFEE /* MyFinanceWidget.swift in Sources */,
 				4CB91B14263DB88700806CA8 /* ItemsViewController.swift in Sources */,
 				4C0F9960263DAC0400AA8749 /* Items.swift in Sources */,
 				4C0F9949263DA9B000AA8749 /* AppDelegate.swift in Sources */,
 				4C0F994B263DA9B000AA8749 /* SceneDelegate.swift in Sources */,
 				4C0F995E263DAB5900AA8749 /* Category.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C5D77F7268D217800218A7D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C5D7807268D217900218A7D /* MyFinanceWidget.intentdefinition in Sources */,
+				4C5D7802268D217900218A7D /* MyFinanceWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +551,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4C5D780A268D217900218A7D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C5D77FA268D217800218A7D /* MyFinanceWidgetExtension */;
+			targetProxy = 4C5D7809268D217900218A7D /* PBXContainerItemProxy */;
+		};
 		4CFC7B762651CF7400239D5A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4CFC7B722651CF7400239D5A /* AWVersion Extension */;
@@ -611,6 +717,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 98B977476FBF1E058264D05C /* Pods-MyFinance.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MyFinance/MyFinance.entitlements;
@@ -635,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 391F52B99AEBB00BA07CD894 /* Pods-MyFinance.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MyFinance/MyFinance.entitlements;
@@ -649,6 +757,54 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vladimirSN.MyFinance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4C5D780E268D217A00218A7D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MyFinanceWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A39ARW5Y9W;
+				INFOPLIST_FILE = MyFinanceWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vladimirSN.MyFinance.MyFinanceWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4C5D780F268D217A00218A7D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MyFinanceWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = A39ARW5Y9W;
+				INFOPLIST_FILE = MyFinanceWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vladimirSN.MyFinance.MyFinanceWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -758,6 +914,15 @@
 			buildConfigurations = (
 				4C0F995A263DA9B100AA8749 /* Debug */,
 				4C0F995B263DA9B100AA8749 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C5D7810268D217A00218A7D /* Build configuration list for PBXNativeTarget "MyFinanceWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C5D780E268D217A00218A7D /* Debug */,
+				4C5D780F268D217A00218A7D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

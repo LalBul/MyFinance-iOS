@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 import RealmSwift
 import Charts
 import SwipeCellKit
@@ -21,9 +22,7 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var realm = try! Realm()
     var categoryArray: Results<Category>?
-    var items: Results<Items>?
     let defaults = UserDefaults.standard
-    
     var session: WCSession?
     
     override func viewDidLoad() {
@@ -33,13 +32,17 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
         configureWatchKitSesstion()
         sendAWData()
         
+        let delegate = ContentViewDelegate()
+        
+        let widgetVC = UIHostingController(rootView: MyFinanceWidgetEntryView(entry: .init(date: Date()), delegate: delegate))
+        
         mainTableView.backgroundColor = UIColor.clear
         mainTableView.delegate = self
         mainTableView.dataSource = self
         mainTableView.layer.cornerRadius = 20
         mainTableView.rowHeight = 60
         
-        navigationController?.navigationBar.barTintColor = HexColor("1D2D50")
+        navigationController?.navigationBar.barTintColor = view.backgroundColor
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -52,7 +55,6 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
         setGradientBackground()
         checkLimit()
         updateChartData()
-        
     }
     
     func checkLimit() {
@@ -156,7 +158,7 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
         gradientLayer.locations = [0.0, 1.0]
         gradientLayer.frame = self.view.bounds
         
-        self.view.layer.insertSublayer(gradientLayer, at:0)
+        view.layer.insertSublayer(gradientLayer, at:0)
     }
     
     
@@ -175,7 +177,7 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func addCategory(_ sender: UIBarButtonItem) {
         addCategoryViewSettings()
     }
-
+    
     fileprivate func addCategoryViewSettings() {
         addBlurEffect()
         
@@ -195,7 +197,7 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
         
         categoryText.layer.cornerRadius = 10
         categoryText.attributedPlaceholder = NSAttributedString(string: "Category name", attributes: [NSAttributedString.Key.foregroundColor : UIColor.white])
-    
+        
         view.addSubview(addCategoryView)
         view.addGestureRecognizer(tap)
         
@@ -212,7 +214,6 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
             if let color = colorView.backgroundColor {
                 colorHex = color.hexValue()
             }
-            
             let newCategory = Category()
             newCategory.title = category
             newCategory.color = colorHex
@@ -305,7 +306,6 @@ class MainScreenViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    
     @IBAction func addColor(_ sender: UIButton) {
         tap.isEnabled = true
         colorView.backgroundColor = demonstrationView.backgroundColor
@@ -339,7 +339,6 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
         cell.delegate = self
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        
         if let category = categoryArray?[indexPath.row] {
             cell.textLabel?.text = category.title
             cell.contentView.backgroundColor = HexColor(category.color)
@@ -382,7 +381,6 @@ extension MainScreenViewController: UITableViewDelegate, UITableViewDataSource, 
             }
         }
     }
-    
     
 }
 

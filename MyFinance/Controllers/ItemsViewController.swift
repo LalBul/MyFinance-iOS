@@ -19,7 +19,7 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
         loadItems()
         
         tableView.rowHeight = 80
-        self.navigationItem.backBarButtonItem?.tintColor = UIColor.white
+        navigationItem.backBarButtonItem?.tintColor = UIColor.white
         addItemOutlet.image = UIImage(named: "add")
         defaultValue = defaults.double(forKey: "Limit")
     }
@@ -123,7 +123,7 @@ class ItemsViewController: UITableViewController, SwipeTableViewCellDelegate {
     
     func backAnimate() {
         blurEffectView.removeFromSuperview()
-        self.navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.isHidden = false
         tableView.isScrollEnabled = true
         wasteTextField.text = ""
         amountTextField.text = ""
