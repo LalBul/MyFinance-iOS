@@ -18,6 +18,7 @@
 - Экран бюджета с основным и дополнительными счетами
 - Поддержка нескольких валют
 - Установление лимита на траты
+- История удаленных покупок
 
 ---
 
@@ -46,6 +47,7 @@
 <img width="507" alt="Снимок экрана 2025-05-12 в 20 07 24" src="https://github.com/user-attachments/assets/e64c4f3a-679b-4b89-abbe-9a82af9f7d7c" />
 <img width="507" alt="Снимок экрана 2025-05-12 в 20 07 47" src="https://github.com/user-attachments/assets/bba731bb-61d7-43a3-afd8-371123cea939" />
 <img width="507" alt="Снимок экрана 2025-05-12 в 20 08 31" src="https://github.com/user-attachments/assets/3d477293-0db7-44e4-9444-162575b14ba9" />
+<img width="507" alt="Снимок экрана 2025-05-12 в 20 13 05" src="https://github.com/user-attachments/assets/d168dbd7-a569-45cb-ab8b-6c6d3d390f7a" />
 
 
 ---
