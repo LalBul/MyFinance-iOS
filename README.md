@@ -38,7 +38,7 @@
 
 ---
 
-## 📸 Скриншоты (добавь)
+## 📸 Скриншоты 
 
 <img width="507" alt="Снимок экрана 2025-05-12 в 20 07 10" src="https://github.com/user-attachments/assets/6f9502a5-5531-435f-9a07-9a6a613fa616" />
 <img width="507" alt="Снимок экрана 2025-05-12 в 20 07 16" src="https://github.com/user-attachments/assets/5121d973-61ff-42e9-a3ef-cc40c63b7e01" />
