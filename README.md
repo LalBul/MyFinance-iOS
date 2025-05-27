@@ -41,13 +41,25 @@
 
 ## 📸 Скриншоты 
 
-<img width="507" alt="Снимок экрана 2025-05-12 в 20 07 10" src="https://github.com/user-attachments/assets/6f9502a5-5531-435f-9a07-9a6a613fa616" />
-<img width="507" alt="Снимок экрана 2025-05-12 в 20 07 16" src="https://github.com/user-attachments/assets/5121d973-61ff-42e9-a3ef-cc40c63b7e01" />
-<img width="507" alt="Снимок экрана 2025-05-12 в 20 07 20" src="https://github.com/user-attachments/assets/c5e6080b-fd87-41bc-9ec8-0f7ea75aed1b" />
-<img width="507" alt="Снимок экрана 2025-05-12 в 20 07 24" src="https://github.com/user-attachments/assets/e64c4f3a-679b-4b89-abbe-9a82af9f7d7c" />
-<img width="507" alt="Снимок экрана 2025-05-12 в 20 07 47" src="https://github.com/user-attachments/assets/bba731bb-61d7-43a3-afd8-371123cea939" />
-<img width="507" alt="Снимок экрана 2025-05-12 в 20 08 31" src="https://github.com/user-attachments/assets/3d477293-0db7-44e4-9444-162575b14ba9" />
-<img width="507" alt="Снимок экрана 2025-05-12 в 20 13 05" src="https://github.com/user-attachments/assets/d168dbd7-a569-45cb-ab8b-6c6d3d390f7a" />
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bf0cb8a5-21f1-4142-a33e-e7f954a91927" width="250" />
+  <img src="https://github.com/user-attachments/assets/cf9513dc-ee18-4e8c-b8c4-1870ccd6fba4" width="250" />
+  <img src="https://github.com/user-attachments/assets/d65289d1-f32c-4e73-85b1-ea0c378c6871" width="250" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5e991d2f-3b21-4289-b535-ce85e3a7ee8d" width="250" />
+  <img src="https://github.com/user-attachments/assets/99ab3a1b-c49f-45d9-a520-d3087e155999" width="250" />
+  <img src="https://github.com/user-attachments/assets/e19f2fda-4569-4ab7-8494-3e31d2e1a6a5" width="250" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/73197b6f-6b9a-4d89-9c94-d6b8ad5915c1" width="250" />
+  <img src="https://github.com/user-attachments/assets/269a8ead-9a01-4231-936b-687cb8fc2209" width="250" />
+  <img src="https://github.com/user-attachments/assets/00103bd6-6834-4fc4-9dc1-ecc677ef3c40" width="250" />
+</p>
+
+
 
 
 ---
